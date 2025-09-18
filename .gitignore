@@ -1,2 +1,3 @@
 /src/main/resources/exercises.txt
+/src/main/resources/application.properties
 /src/main/java/d/shunyaev/RemoteTrainingApp/config/LockboxSecretsLoader.java
