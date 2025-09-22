@@ -3,7 +3,7 @@ package d.shunyaev.RemoteTrainingApp.components;
 import d.shunyaev.RemoteTrainingApp.enums.*;
 import d.shunyaev.RemoteTrainingApp.model.UserInfo;
 import d.shunyaev.RemoteTrainingApp.model.Users;
-import d.shunyaev.RemoteTrainingApp.requests.CreateUserRequest;
+import d.shunyaev.RemoteTrainingApp.requests.users.CreateUserRequest;
 import lombok.experimental.UtilityClass;
 
 import java.time.LocalDate;

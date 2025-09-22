@@ -16,6 +16,7 @@ public enum ResponseCode {
     INVALID_VALUE(-6,"Недопустимое значение"),
     USER_NOT_FOUND(-7,"Пользователь не найден"),
     USER_NAME_NOT_UNIQUE(-8, "Пользователь с user_name: %s уже существует"),
+    NOT_VALID_DAY_OF_WEEK(-9, "Неверно передан день недели %s, попробуйте снова"),
     UNAUTHORIZED(-401, "Ошибка авторизации"),
     EXCEPTION(-500, "Внутренняя ошибка");
 

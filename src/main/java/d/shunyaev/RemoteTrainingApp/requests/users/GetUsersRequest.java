@@ -1,4 +1,4 @@
-package d.shunyaev.RemoteTrainingApp.requests;
+package d.shunyaev.RemoteTrainingApp.requests.users;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

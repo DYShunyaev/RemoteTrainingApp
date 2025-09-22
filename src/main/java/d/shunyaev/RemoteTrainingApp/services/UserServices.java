@@ -13,16 +13,15 @@ import d.shunyaev.RemoteTrainingApp.model.UserInfo;
 import d.shunyaev.RemoteTrainingApp.model.Users;
 import d.shunyaev.RemoteTrainingApp.repositories.UserInfoRepository;
 import d.shunyaev.RemoteTrainingApp.repositories.UserRepository;
-import d.shunyaev.RemoteTrainingApp.requests.CreateUserRequest;
-import d.shunyaev.RemoteTrainingApp.requests.GetUsersRequest;
-import d.shunyaev.RemoteTrainingApp.requests.UpdateUserRequest;
+import d.shunyaev.RemoteTrainingApp.requests.users.CreateUserRequest;
+import d.shunyaev.RemoteTrainingApp.requests.users.GetUsersRequest;
+import d.shunyaev.RemoteTrainingApp.requests.users.UpdateUserRequest;
 import d.shunyaev.RemoteTrainingApp.responses.GetUsersResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class UserServices extends AbstractService {

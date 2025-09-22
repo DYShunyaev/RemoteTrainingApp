@@ -1,6 +1,6 @@
 package d.shunyaev.RemoteTrainingApp.controllers;
 
-import d.shunyaev.RemoteTrainingApp.requests.GetUsersRequest;
+import d.shunyaev.RemoteTrainingApp.requests.users.GetUsersRequest;
 import d.shunyaev.RemoteTrainingApp.responses.GetUsersResponse;
 import d.shunyaev.RemoteTrainingApp.services.UserServices;
 import io.swagger.v3.oas.annotations.Operation;

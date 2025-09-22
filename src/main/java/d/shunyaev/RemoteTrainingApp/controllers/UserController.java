@@ -1,8 +1,8 @@
 package d.shunyaev.RemoteTrainingApp.controllers;
 
 import d.shunyaev.RemoteTrainingApp.model.Result;
-import d.shunyaev.RemoteTrainingApp.requests.CreateUserRequest;
-import d.shunyaev.RemoteTrainingApp.requests.UpdateUserRequest;
+import d.shunyaev.RemoteTrainingApp.requests.users.CreateUserRequest;
+import d.shunyaev.RemoteTrainingApp.requests.users.UpdateUserRequest;
 import d.shunyaev.RemoteTrainingApp.services.UserServices;
 import io.swagger.v3.oas.annotations.Operation;
 import org.core.containers.RequestContainer;

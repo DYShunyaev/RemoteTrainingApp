@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -14,17 +15,18 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Accessors(chain = true)
 public class Training {
 
-    private long id;
-    private Users user;
+    private Long id;
+    private Long userId;
     private DayOfWeek dayOfWeek;
     private LocalDate date;
     private Boolean isDone;
 
     public static class Builder {
         private long id;
-        private Users user;
+        private Long userId;
         private DayOfWeek dayOfWeek;
         private LocalDate date;
         private Boolean isDone;
@@ -34,8 +36,8 @@ public class Training {
             return this;
         }
 
-        public Builder user(Users user) {
-            this.user = user;
+        public Builder userId(Long userId) {
+            this.userId = userId;
             return this;
         }
 
@@ -58,7 +60,7 @@ public class Training {
             Training training = new Training();
 
             training.setId(this.id);
-            training.setUser(this.user);
+            training.setUserId(this.userId);
             training.setDayOfWeek(this.dayOfWeek);
             training.setDate(this.date);
             training.setIsDone(this.isDone);

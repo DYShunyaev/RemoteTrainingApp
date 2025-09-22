@@ -7,7 +7,9 @@ import lombok.experimental.UtilityClass;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @UtilityClass
 public class ValidateComponent {
@@ -34,6 +36,22 @@ public class ValidateComponent {
                 throw LogicException.of(ResponseCode.DEFAULT_VALUE, object);
             }
         });
+    }
+
+    public void dayOfWeekValidation(String dayOfWeek) {
+        Stream.of(
+                "Понедельник",
+                "Вторник",
+                "Среда",
+                "Четверг",
+                "Пятница",
+                "Суббота",
+                "Воскресенье"
+        )
+                .filter(validDay -> validDay.equals(dayOfWeek))
+                .findFirst()
+                .orElseThrow(() -> LogicException.of(ResponseCode.NOT_VALID_DAY_OF_WEEK, dayOfWeek));
+
     }
 
     public boolean assertTwoObject(Object firstObject, Object secondObject) {
