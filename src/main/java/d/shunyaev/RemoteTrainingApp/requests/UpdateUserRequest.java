@@ -27,7 +27,8 @@ public class UpdateUserRequest {
                     "WOMAN",
                     "NON"
             },
-            description = "Допустимые значения: MAN, WOMAN, WOMAN"
+            description = "Допустимые значения: MAN, WOMAN, WOMAN",
+            nullable = true
     )
     private String email;
     @Schema(
@@ -38,7 +39,8 @@ public class UpdateUserRequest {
                     "1"
             },
             description = "0 - пользователь,\n" +
-                    "1 - тренер"
+                    "1 - тренер",
+            nullable = true
     )
     @JsonProperty("is_trainer")
     private Integer isTrainer;
@@ -50,7 +52,8 @@ public class UpdateUserRequest {
                     "Средний",
                     "Продвинутый"
             },
-            description = "Допустимые значения: Новичок, Средний, Продвинутый"
+            description = "Допустимые значения: Новичок, Средний, Продвинутый",
+            nullable = true
     )
     @JsonProperty("training_level")
     private String trainingLevel;
@@ -62,7 +65,8 @@ public class UpdateUserRequest {
                     "Похудение",
                     "Набор массы"
             },
-            description = "Допустимые значения: Поддержание формы, Похудение, Набор массы"
+            description = "Допустимые значения: Поддержание формы, Похудение, Набор массы",
+            nullable = true
     )
     private String goals;
     private Long weight;

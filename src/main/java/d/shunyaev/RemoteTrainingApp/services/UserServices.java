@@ -58,7 +58,7 @@ public class UserServices extends AbstractService {
         }
 
         Users user = SetNewUserComponent.createUser(createUserRequest);
-        UserInfo userInfo = SetNewUserComponent.createUserInfo(createUserRequest, currentDay, user);
+        UserInfo userInfo = SetNewUserComponent.createUserInfo(createUserRequest, currentDay, user.getUserName());
 
         userRepository.setUser(user);
         userInfoRepository.setUserInfo(userInfo);
@@ -73,7 +73,7 @@ public class UserServices extends AbstractService {
         Users existingUser = userRepository.getUserById(request.getUserId());
         ValidateComponent.userNotNull(existingUser);
 
-        UserInfo existinguserInfo = userInfoRepository.getUserInfoByUserId(request.getUserId());
+        UserInfo existinguserInfo = userInfoRepository.getUserInfoByUserName(request.getUserName());
 
         if (request.getEmail() != null) {
             ValidateComponent.validateEmail(request.getEmail());
@@ -81,32 +81,28 @@ public class UserServices extends AbstractService {
 
         Users updatedUser = new Users.Builder()
                 .id(existingUser.getId())
-                .userName(Optional.of(request.getUserName()).orElse(existingUser.getUserName()))
-                .firstName(Optional.of(request.getFirstName()).orElse(existingUser.getFirstName()))
-                .lastName(Optional.of(request.getLastName()).orElse(existingUser.getLastName()))
-                .roles(request.getIsTrainer() != null
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .roles(Objects.nonNull(request.getIsTrainer())
                         ? request.getIsTrainer() == 1 ? Role.TRAINER : Role.USER
-                        : existingUser.getRole())
-                .email(Optional.of(request.getEmail()).orElse(existingUser.getEmail()))
+                        : null)
+                .email(request.getEmail())
                 .build();
 
         UserInfo updatedUserInfo = new UserInfo.Builder()
                 .id(existinguserInfo.getId())
-                .height(Optional.of(request.getHeight()).orElse(existinguserInfo.getHeight()))
-                .weight(Optional.of(request.getWeight()).orElse(existinguserInfo.getWeight()))
-                .dateOfBirth(existinguserInfo.getDateOfBirth())
-                .user(updatedUser)
-                .age(existinguserInfo.getAge())
-                .goals(request.getGoals() != null
+                .height(request.getHeight())
+                .weight(request.getWeight())
+                .goals(Objects.nonNull(request.getGoals())
                         ? (Goals) SupportComponent.getEnumValue(Goals.values(), request.getGoals())
-                        : existinguserInfo.getGoals())
-                .trainingLevel(request.getTrainingLevel() != null
+                        : null)
+                .trainingLevel(Objects.nonNull(request.getTrainingLevel())
                         ? (TrainingLevel) SupportComponent.getEnumValue(TrainingLevel.values(), request.getTrainingLevel())
-                        : existinguserInfo.getTrainingLevel())
+                        : null)
                 .build();
 
-        userRepository.setUser(updatedUser);
-        userInfoRepository.setUserInfo(updatedUserInfo);
+        userRepository.updateUser(updatedUser);
+        userInfoRepository.updateUserInfo(updatedUserInfo);
         return new Result(Result.Message.SUCCESS);
     }
 
@@ -125,7 +121,7 @@ public class UserServices extends AbstractService {
         return new GetUsersResponse()
                 .setUsers(usersList.stream()
                         .map(user -> {
-                            UserInfo userInfo = userInfoRepository.getUserInfoByUserId(user.getId());
+                            UserInfo userInfo = userInfoRepository.getUserInfoByUserName(user.getUserName());
                             return new GetUsersResponse.UserData.UserDataBuilder()
                                     .userName(user.getUserName())
                                     .firstName(user.getFirstName())

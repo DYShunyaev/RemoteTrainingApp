@@ -2,13 +2,9 @@ package d.shunyaev.RemoteTrainingApp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import d.shunyaev.RemoteTrainingApp.components.SupportComponent;
 import d.shunyaev.RemoteTrainingApp.enums.Goals;
 import d.shunyaev.RemoteTrainingApp.enums.TrainingLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -19,38 +15,38 @@ import java.time.LocalDate;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserInfo {
 
-    private long id;
-    private long weight;
-    private long height;
+    private Long id;
+    private Long weight;
+    private Long height;
     @JsonProperty("date_of_birth")
     private LocalDate dateOfBirth;
-    private Users user;
+    private String userName;
     private int age;
     private Goals goals;
     @JsonProperty("training_level")
     private TrainingLevel trainingLevel;
 
     public static class Builder {
-        private long id;
-        private long weight;
-        private long height;
+        private Long id;
+        private Long weight;
+        private Long height;
         private LocalDate dateOfBirth;
-        private Users user;
+        private String userName;
         private int age;
         private Goals goals;
         private TrainingLevel trainingLevel;
 
-        public Builder id(long id) {
+        public Builder id(Long id) {
             this.id = id;
             return this;
         }
 
-        public Builder weight(long weight) {
+        public Builder weight(Long weight) {
             this.weight = weight;
             return this;
         }
 
-        public Builder height(long height) {
+        public Builder height(Long height) {
             this.height = height;
             return this;
         }
@@ -60,8 +56,8 @@ public class UserInfo {
             return this;
         }
 
-        public Builder user(Users user) {
-            this.user = user;
+        public Builder userName(String userName) {
+            this.userName = userName;
             return this;
         }
 
@@ -86,7 +82,7 @@ public class UserInfo {
             userInfo.setHeight(this.height);
             userInfo.setWeight(this.weight);
             userInfo.setDateOfBirth(this.dateOfBirth);
-            userInfo.setUser(user);
+            userInfo.setUserName(userName);
             userInfo.setAge(age);
             userInfo.setGoals(goals);
             userInfo.setTrainingLevel(trainingLevel);

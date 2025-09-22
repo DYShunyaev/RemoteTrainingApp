@@ -12,12 +12,12 @@ import java.time.Period;
 @UtilityClass
 public class SetNewUserComponent {
 
-    public UserInfo createUserInfo(CreateUserRequest request, LocalDate currentDay, Users user) {
+    public UserInfo createUserInfo(CreateUserRequest request, LocalDate currentDay, String userName) {
         return new UserInfo.Builder()
                 .height(request.getHeight())
                 .weight(request.getWeight())
                 .dateOfBirth(request.getDateOfBirth())
-                .user(user)
+                .userName(userName)
                 .age(Period.between(request.getDateOfBirth(), currentDay).getYears())
                 .goals((Goals) SupportComponent.getEnumValue(Goals.values(), request.getGoals()))
                 .trainingLevel((TrainingLevel) SupportComponent.getEnumValue(TrainingLevel.values(), request.getTrainingLevel()))

@@ -17,7 +17,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_name" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="first_name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
@@ -57,11 +57,11 @@
             <column name="date_of_birth" type="DATE">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_id" type="BIGINT">
+            <column name="user_name" type="VARCHAR(255)">
                 <constraints nullable="false"
-                             foreignKeyName="user_id"
+                             foreignKeyName="user_name"
                              referencedTableName="users"
-                             referencedColumnNames="id"/>
+                             referencedColumnNames="user_name"/>
             </column>
             <column name="age" type="INTEGER">
                 <constraints nullable="false"/>
