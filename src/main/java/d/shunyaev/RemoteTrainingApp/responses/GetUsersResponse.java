@@ -24,6 +24,8 @@ public class GetUsersResponse {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class UserData {
+        @JsonProperty("user_id")
+        private long userId;
         @JsonProperty("user_name")
         private String userName;
         @JsonProperty("first_name")
@@ -43,6 +45,7 @@ public class GetUsersResponse {
         private long height;
 
         public static class UserDataBuilder {
+            private long userId;
             private String userName;
             private String firstName;
             private String lastName;
@@ -55,6 +58,11 @@ public class GetUsersResponse {
             private String goals;
             private long weight;
             private long height;
+
+            public UserDataBuilder userId(long userId) {
+                this.userId = userId;
+                return this;
+            }
 
             public UserDataBuilder userName(String userName) {
                 this.userName = userName;
@@ -118,6 +126,8 @@ public class GetUsersResponse {
 
             public UserData build() {
                 UserData userData = new UserData();
+
+                userData.setUserId(this.userId);
                 userData.setUserName(this.userName);
                 userData.setFirstName(this.firstName);
                 userData.setLastName(this.lastName);

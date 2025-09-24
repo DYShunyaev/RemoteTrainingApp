@@ -2,8 +2,7 @@ package d.shunyaev.RemoteTrainingApp.controllers;
 
 import d.shunyaev.RemoteTrainingApp.model.Result;
 import d.shunyaev.RemoteTrainingApp.requests.trainings.*;
-import d.shunyaev.RemoteTrainingApp.requests.users.GetUsersRequest;
-import d.shunyaev.RemoteTrainingApp.responses.GetUsersResponse;
+import d.shunyaev.RemoteTrainingApp.responses.GetTrainingsResponse;
 import d.shunyaev.RemoteTrainingApp.services.TrainingService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.constraints.NotNull;

@@ -14,13 +14,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Repository
-public class UserInfoRepository {
-
-    private final JdbcTemplate jdbcTemplate;
+public class UserInfoRepository extends BaseRepository {
 
     @Autowired
     public UserInfoRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+        super(jdbcTemplate);
     }
 
     public List<UserInfo> getAllUserInfo() {

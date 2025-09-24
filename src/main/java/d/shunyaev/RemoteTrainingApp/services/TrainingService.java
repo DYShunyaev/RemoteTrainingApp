@@ -12,7 +12,7 @@ import d.shunyaev.RemoteTrainingApp.repositories.UserInfoRepository;
 import d.shunyaev.RemoteTrainingApp.repositories.UserRepository;
 import d.shunyaev.RemoteTrainingApp.requests.CompletionRequest;
 import d.shunyaev.RemoteTrainingApp.requests.trainings.*;
-import d.shunyaev.RemoteTrainingApp.utils.FileHelper;
+import d.shunyaev.RemoteTrainingApp.responses.GetTrainingsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,12 +76,14 @@ public class TrainingService {
                             exerciseRepository.getExercisesByTrainingId(training.getId())
                                     .stream()
                                     .map(exercise -> new GetTrainingsResponse.Exercises()
+                                            .setExerciseId(exercise.getId())
                                             .setApproach(exercise.getApproach())
                                             .setQuantity(exercise.getQuantity())
                                             .setExerciseName(exercise.getExerciseName()))
                                     .toList();
 
                     return new GetTrainingsResponse.Trainings()
+                            .setTrainingId(training.getId())
                             .setDate(training.getDate())
                             .setDayOfWeek(SupportComponent.dayOfWeekToRus(training.getDayOfWeek()))
                             .setIsDone(training.getIsDone())

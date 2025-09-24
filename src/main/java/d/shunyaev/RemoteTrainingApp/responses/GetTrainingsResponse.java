@@ -1,4 +1,4 @@
-package d.shunyaev.RemoteTrainingApp.requests.trainings;
+package d.shunyaev.RemoteTrainingApp.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -15,6 +15,8 @@ public class GetTrainingsResponse {
     @Data
     @Accessors(chain = true)
     public static class Trainings {
+        @JsonProperty("training_id")
+        private long trainingId;
         @JsonProperty("day_of_week")
         private String dayOfWeek;
         private LocalDate date;
@@ -28,6 +30,8 @@ public class GetTrainingsResponse {
     @Data
     @Accessors(chain = true)
     public static class Exercises {
+        @JsonProperty("exercise_id")
+        private long exerciseId;
         @JsonProperty("exercise_name")
         private String exerciseName;
         private int quantity;

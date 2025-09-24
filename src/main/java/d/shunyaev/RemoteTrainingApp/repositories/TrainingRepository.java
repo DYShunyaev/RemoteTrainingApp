@@ -12,13 +12,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Repository
-public class TrainingRepository {
-
-    private final JdbcTemplate jdbcTemplate;
+public class TrainingRepository extends BaseRepository {
 
     @Autowired
     public TrainingRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+        super(jdbcTemplate);
     }
 
     public void setNewTraining(Training training) {

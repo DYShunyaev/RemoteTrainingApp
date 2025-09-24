@@ -126,6 +126,7 @@ public class UserServices extends AbstractService {
                         .map(user -> {
                             UserInfo userInfo = userInfoRepository.getUserInfoByUserName(user.getUserName());
                             return new GetUsersResponse.UserData.UserDataBuilder()
+                                    .userId(user.getId())
                                     .userName(user.getUserName())
                                     .firstName(user.getFirstName())
                                     .lastName(user.getLastName())

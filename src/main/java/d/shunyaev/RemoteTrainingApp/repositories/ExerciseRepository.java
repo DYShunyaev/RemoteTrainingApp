@@ -9,9 +9,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class ExerciseRepository {
+public class ExerciseRepository extends BaseRepository {
 
-    private final JdbcTemplate jdbcTemplate;
+    @Autowired
+    public ExerciseRepository(JdbcTemplate jdbcTemplate) {
+        super(jdbcTemplate);
+    }
 
     public void setExercise(Exercise exercise) {
         String sql = """
@@ -31,11 +34,6 @@ public class ExerciseRepository {
                 where training_id = ?
                 """;
         return jdbcTemplate.query(sql, mapToRowToTraining(), trainingId);
-    }
-
-    @Autowired
-    public ExerciseRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
     }
 
     private RowMapper<Exercise> mapToRowToTraining() {
