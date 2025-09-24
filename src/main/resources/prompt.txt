@@ -1,0 +1,41 @@
+Напиши программу тренировок на count дней, учитывая следующие параметры:
+• Пол: gender
+• Возраст: age
+• Рост: height
+• Вес: weight
+• День первой тренировки: dayOfWeek
+• Уровень подготовки: trainingLevel
+• Цели тренировок: goals
+
+Ответ должен быть в формате json по схеме:
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "trainings": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "day_of_week": { "type": "string" },
+                    "muscle_group": { "type": "string" },
+                    "exercises": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "exercise_name": { "type": "string" },
+                                "quantity": { "type": "integer" },
+                                "approach": { "type": "integer" }
+                            },
+                            "required": ["exercise_name", "quantity", "approach"]
+                        }
+                    }
+                },
+                "required": ["day_of_week", "muscle_group", "exercises"]
+            }
+        }
+    },
+    "required": ["trainings"]
+}
+Пожалуйста, следуй этому формату для всех дней тренировок.

@@ -7,7 +7,6 @@ import lombok.experimental.UtilityClass;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -21,6 +20,12 @@ public class ValidateComponent {
                         throw LogicException.of(ResponseCode.NPE,"");
                     }
                 });
+    }
+
+    public void objectMoreZero(Number object) {
+        if (object.doubleValue() <= 0) {
+            throw LogicException.of(ResponseCode.VALUE_IS_LESS_OR_EQUALS_ZERO);
+        }
     }
 
     public void userNotNull(Users users) {
@@ -68,6 +73,12 @@ public class ValidateComponent {
         LocalDate currentDate = LocalDate.now();
         if (birthDate.isAfter(currentDate)) {
             throw LogicException.of(ResponseCode.BIRTH_DATE);
+        }
+    }
+
+    public void validateDate(LocalDate date) {
+        if (!date.equals(LocalDate.now()) && date.isBefore(LocalDate.now())) {
+            throw LogicException.of(ResponseCode.DATE_IS_BEFORE_NOW);
         }
     }
 }

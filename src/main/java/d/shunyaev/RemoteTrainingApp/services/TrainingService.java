@@ -1,24 +1,26 @@
 package d.shunyaev.RemoteTrainingApp.services;
 
+import d.shunyaev.RemoteTrainingApp.components.GptComponent;
 import d.shunyaev.RemoteTrainingApp.components.SupportComponent;
 import d.shunyaev.RemoteTrainingApp.components.ValidateComponent;
-import d.shunyaev.RemoteTrainingApp.model.Exercise;
-import d.shunyaev.RemoteTrainingApp.model.Result;
-import d.shunyaev.RemoteTrainingApp.model.Training;
-import d.shunyaev.RemoteTrainingApp.model.Users;
+import d.shunyaev.RemoteTrainingApp.enums.ResponseCode;
+import d.shunyaev.RemoteTrainingApp.exceptions.LogicException;
+import d.shunyaev.RemoteTrainingApp.model.*;
 import d.shunyaev.RemoteTrainingApp.repositories.ExerciseRepository;
 import d.shunyaev.RemoteTrainingApp.repositories.TrainingRepository;
 import d.shunyaev.RemoteTrainingApp.repositories.UserInfoRepository;
 import d.shunyaev.RemoteTrainingApp.repositories.UserRepository;
-import d.shunyaev.RemoteTrainingApp.requests.trainings.CreateExerciseRequest;
-import d.shunyaev.RemoteTrainingApp.requests.trainings.CreateTrainingRequest;
-import d.shunyaev.RemoteTrainingApp.requests.trainings.GetTrainingsRequest;
-import d.shunyaev.RemoteTrainingApp.requests.trainings.GetTrainingsResponse;
+import d.shunyaev.RemoteTrainingApp.requests.CompletionRequest;
+import d.shunyaev.RemoteTrainingApp.requests.trainings.*;
+import d.shunyaev.RemoteTrainingApp.utils.FileHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class TrainingService {
@@ -27,14 +29,17 @@ public class TrainingService {
     private final UserInfoRepository userInfoRepository;
     private final TrainingRepository trainingRepository;
     private final ExerciseRepository exerciseRepository;
+    private final GptService gptService;
 
     @Autowired
     public TrainingService(UserRepository userRepository, UserInfoRepository userInfoRepository,
-                           TrainingRepository trainingRepository, ExerciseRepository exerciseRepository) {
+                           TrainingRepository trainingRepository, ExerciseRepository exerciseRepository,
+                           GptService gptService) {
         this.userRepository = userRepository;
         this.userInfoRepository = userInfoRepository;
         this.trainingRepository = trainingRepository;
         this.exerciseRepository = exerciseRepository;
+        this.gptService = gptService;
     }
 
     @Transactional
@@ -42,8 +47,9 @@ public class TrainingService {
         ValidateComponent.notNull(
                 request.getUserId(),
                 request.getDayOfWeek(),
-                request.getDate());
-
+                request.getDate(),
+                request.getMuscleGroup());
+        ValidateComponent.validateDate(request.getDate());
         ValidateComponent.dayOfWeekValidation(request.getDayOfWeek());
 
         Users user = userRepository.getUserById(request.getUserId());
@@ -51,6 +57,7 @@ public class TrainingService {
         Training training = new Training()
                 .setUserId(user.getId())
                 .setDate(request.getDate())
+                .setMuscleGroup(request.getMuscleGroup())
                 .setDayOfWeek(SupportComponent.compareRusToDayOfWeek(request.getDayOfWeek()));
 
         trainingRepository.setNewTraining(training);
@@ -67,12 +74,12 @@ public class TrainingService {
                 .map(training -> {
                     List<GetTrainingsResponse.Exercises> exercisesList =
                             exerciseRepository.getExercisesByTrainingId(training.getId())
-                            .stream()
-                            .map(exercise -> new GetTrainingsResponse.Exercises()
-                                    .setApproach(exercise.getApproach())
-                                    .setQuantity(exercise.getQuantity())
-                                    .setExerciseName(exercise.getExerciseName()))
-                            .toList();
+                                    .stream()
+                                    .map(exercise -> new GetTrainingsResponse.Exercises()
+                                            .setApproach(exercise.getApproach())
+                                            .setQuantity(exercise.getQuantity())
+                                            .setExerciseName(exercise.getExerciseName()))
+                                    .toList();
 
                     return new GetTrainingsResponse.Trainings()
                             .setDate(training.getDate())
@@ -80,7 +87,18 @@ public class TrainingService {
                             .setIsDone(training.getIsDone())
                             .setExercises(exercisesList);
                 })
+                .sorted(Comparator.comparing(GetTrainingsResponse.Trainings::getDate))
                 .toList();
+
+        if (Objects.nonNull(request.getDateOfTraining())) {
+            ValidateComponent.validateDate(request.getDateOfTraining());
+            trainingsResponse = List.of(trainingsResponse
+                    .stream()
+                    .filter(train -> train.getDate().equals(request.getDateOfTraining()))
+                    .findFirst()
+                    .orElseThrow(() -> LogicException.of(ResponseCode.TRAINING_IS_NOT_FOUND,
+                            request.getDateOfTraining())));
+        }
         return new GetTrainingsResponse()
                 .setTrainings(trainingsResponse);
     }
@@ -103,6 +121,44 @@ public class TrainingService {
                 .setApproach(request.getApproach());
 
         exerciseRepository.setExercise(exercise);
+        return new Result(Result.Message.SUCCESS);
+    }
+
+    @Transactional
+    public Result generateTraining(GenerateTrainingRequest request) {
+        ValidateComponent.notNull(request.getUserId());
+        ValidateComponent.dayOfWeekValidation(request.getDayOfWeekFirstTraining());
+        ValidateComponent.validateDate(request.getDateFirstTraining());
+        ValidateComponent.objectMoreZero(request.getCount());
+
+        Users user = userRepository.getUserById(request.getUserId());
+        UserInfo userInfo = userInfoRepository.getUserInfoByUserName(user.getUserName());
+
+        String prompt = GptComponent.getPrompt(request.getCount(), user, userInfo, request.getDayOfWeekFirstTraining());
+
+        CompletionRequest completionRequest = new CompletionRequest()
+                .setMaxTokens(3000)
+                .setPrompt(prompt)
+                .setStream(false);
+
+        String responseFromGpt = gptService.sendCompletionRequest(completionRequest);
+
+        var trainingsMap = GptComponent.parseTrainings(responseFromGpt, user.getId(), request.getDateFirstTraining());
+
+        for (Map.Entry<Training, List<Exercise>> trainings : trainingsMap.entrySet()) {
+            trainingRepository.setNewTraining(trainings.getKey());
+            Training training = trainingRepository.getTrainingsByUserId(user.getId())
+                    .stream()
+                    .filter(t -> t.equalsWithIgnoreId(trainings.getKey()))
+                    .findFirst()
+                    .orElseThrow(() -> LogicException.of(ResponseCode.INVALID_VALUE));
+
+            for (Exercise exercises : trainings.getValue()) {
+                exerciseRepository.setExercise(
+                        exercises
+                                .setTrainingId(training.getId()));
+            }
+        }
         return new Result(Result.Message.SUCCESS);
     }
 }

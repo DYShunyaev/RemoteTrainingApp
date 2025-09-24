@@ -2,6 +2,7 @@ package d.shunyaev.RemoteTrainingApp.controllers;
 
 import d.shunyaev.RemoteTrainingApp.model.Result;
 import d.shunyaev.RemoteTrainingApp.requests.trainings.CreateTrainingRequest;
+import d.shunyaev.RemoteTrainingApp.requests.trainings.GenerateTrainingRequest;
 import d.shunyaev.RemoteTrainingApp.requests.trainings.GetTrainingsRequest;
 import d.shunyaev.RemoteTrainingApp.requests.trainings.GetTrainingsResponse;
 import d.shunyaev.RemoteTrainingApp.requests.users.GetUsersRequest;
@@ -22,6 +23,7 @@ public class TrainingController extends AbstractController {
 
     private static final String SET_TRAINING = API_PREFIX + "/training";
     private static final String GET_TRAINING = API_PREFIX + "/get_training";
+    private static final String GENERATE_TRAINING = API_PREFIX + "/generate_training";
 
     private final TrainingService trainingService;
 
@@ -40,5 +42,11 @@ public class TrainingController extends AbstractController {
     @PostMapping(GET_TRAINING)
     public ResponseContainer<GetTrainingsResponse> getTrainings(@NotNull @RequestBody RequestContainer<GetTrainingsRequest> requestContainer) {
         return call(trainingService::getTrainings, requestContainer);
+    }
+
+    @Operation(summary = "Сервис генерации тренировок")
+    @PostMapping(GENERATE_TRAINING)
+    public ResponseContainer<Result> generateTraining(@NotNull @RequestBody RequestContainer<GenerateTrainingRequest> requestContainer) {
+        return call(trainingService::generateTraining, requestContainer);
     }
 }
