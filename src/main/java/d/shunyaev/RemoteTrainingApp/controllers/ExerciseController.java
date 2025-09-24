@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ExerciseController extends AbstractController {
 
-    private static final String SET_EXERCISE = API_PREFIX + "/exercise";
+    private static final String SET_EXERCISE = API_PREFIX + "/create_exercise";
 
     private final TrainingService trainingService;
 

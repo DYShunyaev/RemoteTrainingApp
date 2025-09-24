@@ -85,15 +85,16 @@ public class UserInfoRepository extends BaseRepository {
     }
 
     private RowMapper<UserInfo> mapToRowToUserInfo() {
-        return ((rs, rowNum) -> new UserInfo.Builder()
-                .height(rs.getLong("height"))
-                .weight(rs.getLong("weight"))
-                .dateOfBirth(rs.getDate("date_of_birth").toLocalDate())
-                .userName(rs.getString("user_name"))
-                .age(rs.getInt("age"))
-                .goals((Goals) SupportComponent.getEnumValue(Goals.values(), rs.getString("goals")))
-                .trainingLevel((TrainingLevel) SupportComponent.getEnumValue(TrainingLevel.values(), rs.getString("training_level")))
-                .build());
+        return ((rs, rowNum) -> new UserInfo()
+                .setId(rs.getLong("id"))
+                .setHeight(rs.getLong("height"))
+                .setWeight(rs.getLong("weight"))
+                .setDateOfBirth(rs.getDate("date_of_birth").toLocalDate())
+                .setUserName(rs.getString("user_name"))
+                .setAge(rs.getInt("age"))
+                .setGoals((Goals) SupportComponent.getEnumValue(Goals.values(), rs.getString("goals")))
+                .setTrainingLevel((TrainingLevel) SupportComponent.getEnumValue(TrainingLevel.values(),
+                        rs.getString("training_level"))));
     }
 
 }

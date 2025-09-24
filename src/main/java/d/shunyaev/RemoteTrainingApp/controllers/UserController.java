@@ -2,6 +2,7 @@ package d.shunyaev.RemoteTrainingApp.controllers;
 
 import d.shunyaev.RemoteTrainingApp.model.Result;
 import d.shunyaev.RemoteTrainingApp.requests.users.CreateUserRequest;
+import d.shunyaev.RemoteTrainingApp.requests.users.SetTrainerRequest;
 import d.shunyaev.RemoteTrainingApp.requests.users.UpdateUserRequest;
 import d.shunyaev.RemoteTrainingApp.services.UserServices;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,8 +16,9 @@ import jakarta.validation.constraints.NotNull;
 @RestController
 public class UserController extends AbstractController {
 
-    private static final String SET_USER = API_PREFIX + "/user";
+    private static final String CREATE_USER = API_PREFIX + "/create_user";
     private static final String UPDATE_USER = API_PREFIX + "/update_user";
+    private static final String SET_TRAINER = API_PREFIX + "/set_trainer";
 
     private final UserServices userServices;
 
@@ -26,7 +28,7 @@ public class UserController extends AbstractController {
     }
 
     @Operation(summary = "Сервис создания пользователя")
-    @PostMapping(SET_USER)
+    @PostMapping(CREATE_USER)
     public ResponseContainer<Result> createUser(@NotNull @RequestBody RequestContainer<CreateUserRequest> requestContainer) {
         return call(userServices::setNewUser, requestContainer);
     }
@@ -35,6 +37,12 @@ public class UserController extends AbstractController {
     @PostMapping(UPDATE_USER)
     public ResponseContainer<Result> updateUser(@NotNull @RequestBody RequestContainer<UpdateUserRequest> requestContainer) {
         return call(userServices::updateUser, requestContainer);
+    }
+
+    @Operation(summary = "Сервис добавления тренера")
+    @PostMapping(SET_TRAINER)
+    public ResponseContainer<Result> setTrainer(@NotNull @RequestBody RequestContainer<SetTrainerRequest> requestContainer) {
+        return call(userServices::setTrainer, requestContainer);
     }
 
 }

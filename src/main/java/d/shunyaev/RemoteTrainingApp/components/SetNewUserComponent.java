@@ -13,25 +13,24 @@ import java.time.Period;
 public class SetNewUserComponent {
 
     public UserInfo createUserInfo(CreateUserRequest request, LocalDate currentDay, String userName) {
-        return new UserInfo.Builder()
-                .height(request.getHeight())
-                .weight(request.getWeight())
-                .dateOfBirth(request.getDateOfBirth())
-                .userName(userName)
-                .age(Period.between(request.getDateOfBirth(), currentDay).getYears())
-                .goals((Goals) SupportComponent.getEnumValue(Goals.values(), request.getGoals()))
-                .trainingLevel((TrainingLevel) SupportComponent.getEnumValue(TrainingLevel.values(), request.getTrainingLevel()))
-                .build();
+        return new UserInfo()
+                .setHeight(request.getHeight())
+                .setWeight(request.getWeight())
+                .setDateOfBirth(request.getDateOfBirth())
+                .setUserName(userName)
+                .setAge(Period.between(request.getDateOfBirth(), currentDay).getYears())
+                .setGoals((Goals) SupportComponent.getEnumValue(Goals.values(), request.getGoals()))
+                .setTrainingLevel((TrainingLevel)
+                        SupportComponent.getEnumValue(TrainingLevel.values(), request.getTrainingLevel()));
     }
 
     public Users createUser(CreateUserRequest request) {
-        return new Users.Builder()
-                .userName(request.getUserName())
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .roles(request.getIsTrainer() == 1 ? Role.TRAINER : Role.USER)
-                .gender((Gender) SupportComponent.getEnumValue(Gender.values(), request.getGender()))
-                .email(request.getEmail())
-                .build();
+        return new Users()
+                .setUserName(request.getUserName())
+                .setFirstName(request.getFirstName())
+                .setLastName(request.getLastName())
+                .setRole(request.getIsTrainer() == 1 ? Role.TRAINER : Role.USER)
+                .setEmail(request.getEmail())
+                .setGender(request.getGender());
     }
 }

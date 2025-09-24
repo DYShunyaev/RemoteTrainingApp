@@ -21,6 +21,37 @@ public class UserRepository extends BaseRepository {
         super(jdbcTemplate);
     }
 
+    public void setTrainer(long userId, long trainerId) {
+        String sql = """
+                insert into user_trainer (user_id, trainer_id)
+                values (?, ?)
+                """;
+        jdbcTemplate.update(sql, userId, trainerId);
+    }
+
+    public Users getTrainerByUserId(long userId) {
+        String sql = """
+                select * from users u
+                    join user_trainer ut
+                        on u.id = ut.trainer_id
+                    where ut.user_id = ?
+                """;
+        return jdbcTemplate.query(sql, mapToRowToUser(), userId)
+                .stream()
+                .findFirst()
+                .orElse(null);
+    }
+
+    public List<Users> getUsersByTrainerId(long trainerId) {
+        String sql = """
+                select * from users u
+                    join user_trainer ut
+                        on u.id = ut.user_id
+                    where ut.trainer_id = ?
+                """;
+        return jdbcTemplate.query(sql, mapToRowToUser(), trainerId);
+    }
+
     public List<Users> getAllUsers() {
         String sql = "SELECT * from users";
         return jdbcTemplate.query(sql, mapToRowToUser());
@@ -99,14 +130,13 @@ public class UserRepository extends BaseRepository {
     }
 
     private RowMapper<Users> mapToRowToUser() {
-        return ((rs, rowNum) -> new Users.Builder()
-                .id(rs.getLong("id"))
-                .userName(rs.getString("user_name"))
-                .firstName(rs.getString("first_name"))
-                .lastName(rs.getString("last_name"))
-                .roles((Role) SupportComponent.getEnumValue(Role.values(), rs.getString("role")))
-                .gender((Gender) SupportComponent.getEnumValue(Gender.values(), rs.getString("gender")))
-                .email(rs.getString("email"))
-                .build());
+        return ((rs, rowNum) -> new Users()
+                .setId(rs.getLong("id"))
+                .setUserName(rs.getString("user_name"))
+                .setFirstName(rs.getString("first_name"))
+                .setLastName(rs.getString("last_name"))
+                .setRole((Role) SupportComponent.getEnumValue(Role.values(), rs.getString("role")))
+                .setGender((Gender) SupportComponent.getEnumValue(Gender.values(), rs.getString("gender")))
+                .setEmail(rs.getString("email")));
     }
 }
