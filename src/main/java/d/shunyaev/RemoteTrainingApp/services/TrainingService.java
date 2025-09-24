@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -99,7 +98,8 @@ public class TrainingService {
                     .stream()
                     .filter(train -> train.getDate().equals(request.getDateOfTraining()))
                     .findFirst()
-                    .orElseThrow(() -> LogicException.of(ResponseCode.TRAINING_IS_NOT_FOUND,
+                    .orElseThrow(() -> LogicException.of(
+                            ResponseCode.TRAINING_IS_NOT_FOUND,
                             request.getDateOfTraining())));
         }
         return new GetTrainingsResponse()
@@ -162,30 +162,28 @@ public class TrainingService {
         UserInfo userInfo = userInfoRepository.getUserInfoByUserName(user.getUserName());
 
         String prompt = GptComponent.getPrompt(request.getCount(), user, userInfo, request.getDayOfWeekFirstTraining());
-
-        CompletionRequest completionRequest = new CompletionRequest()
+        String responseFromGpt = gptService.sendCompletionRequest(
+                new CompletionRequest()
                 .setMaxTokens(3000)
                 .setPrompt(prompt)
-                .setStream(false);
-
-        String responseFromGpt = gptService.sendCompletionRequest(completionRequest);
+                .setStream(false)
+        );
 
         var trainingsMap = GptComponent.parseTrainings(responseFromGpt, user.getId(), request.getDateFirstTraining());
 
-        for (Map.Entry<Training, List<Exercise>> trainings : trainingsMap.entrySet()) {
-            trainingRepository.setNewTraining(trainings.getKey());
+        trainingsMap.forEach((trainingKey, exercises) -> {
+            trainingRepository.setNewTraining(trainingKey);
             Training training = trainingRepository.getTrainingsByUserId(user.getId())
                     .stream()
-                    .filter(t -> t.equalsWithIgnoreId(trainings.getKey()))
+                    .filter(t -> t.equalsWithIgnoreId(trainingKey))
                     .findFirst()
                     .orElseThrow(() -> LogicException.of(ResponseCode.INVALID_VALUE));
 
-            for (Exercise exercises : trainings.getValue()) {
-                exerciseRepository.setExercise(
-                        exercises
-                                .setTrainingId(training.getId()));
-            }
-        }
+            exercises.forEach(exercise -> exerciseRepository.setExercise(
+                    exercise.setTrainingId(training.getId()))
+            );
+        });
+
         return new Result(Result.Message.SUCCESS);
     }
 }

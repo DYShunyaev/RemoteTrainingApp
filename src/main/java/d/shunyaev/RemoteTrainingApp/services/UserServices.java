@@ -147,21 +147,20 @@ public class UserServices extends AbstractService {
                 .setUsers(usersList.stream()
                         .map(user -> {
                             UserInfo userInfo = userInfoRepository.getUserInfoByUserName(user.getUserName());
-                            return new GetUsersResponse.UserData.UserDataBuilder()
-                                    .userId(user.getId())
-                                    .userName(user.getUserName())
-                                    .firstName(user.getFirstName())
-                                    .lastName(user.getLastName())
-                                    .gender(user.getGender().getDescription())
-                                    .email(user.getEmail())
-                                    .dateOfBirth(userInfo.getDateOfBirth())
-                                    .age(userInfo.getAge())
-                                    .role(user.getRole().getDescription())
-                                    .trainingLevel(userInfo.getTrainingLevel().getDescription())
-                                    .goals(userInfo.getGoals().getDescription())
-                                    .weight(userInfo.getWeight())
-                                    .height(userInfo.getHeight())
-                                    .build();
+                            return new GetUsersResponse.UserData()
+                                    .setUserId(user.getId())
+                                    .setUserName(user.getUserName())
+                                    .setFirstName(user.getFirstName())
+                                    .setLastName(user.getLastName())
+                                    .setGender(user.getGender().getDescription())
+                                    .setEmail(user.getEmail())
+                                    .setDateOfBirth(userInfo.getDateOfBirth())
+                                    .setAge(userInfo.getAge())
+                                    .setRole(user.getRole().getDescription())
+                                    .setTrainingLevel(userInfo.getTrainingLevel().getDescription())
+                                    .setGoals(userInfo.getGoals().getDescription())
+                                    .setWeight(userInfo.getWeight())
+                                    .setHeight(userInfo.getHeight());
                         })
                         .toList());
     }
