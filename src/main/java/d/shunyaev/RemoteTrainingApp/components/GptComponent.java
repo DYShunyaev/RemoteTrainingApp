@@ -67,9 +67,9 @@ public class GptComponent {
     private LocalDate getTrainingDate(DayOfWeek dayOfWeekActual, Map<Training, List<Exercise>> trainingMap,
                                       LocalDate dateFirstTraining) {
         if (trainingMap.isEmpty()) {
-            do {
+            while (!dateFirstTraining.getDayOfWeek().equals(dayOfWeekActual)) {
                 dateFirstTraining = dateFirstTraining.plusDays(1);
-            } while (!dateFirstTraining.getDayOfWeek().equals(dayOfWeekActual));
+            }
             return dateFirstTraining;
         }
         else {
