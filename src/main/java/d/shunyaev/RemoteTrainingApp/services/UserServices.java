@@ -69,6 +69,10 @@ public class UserServices extends AbstractService {
                 request.getUserId()
         );
 
+        if (!userRepository.userIsExist(request.getUserId())) {
+            throw LogicException.of(ResponseCode.NOT_FOUND_USER, request.getUserId());
+        }
+
         Users existingUser = userRepository.getUserById(request.getUserId());
         ValidateComponent.userNotNull(existingUser);
 

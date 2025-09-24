@@ -28,9 +28,24 @@ public class UserRepository {
         return jdbcTemplate.query(sql, mapToRowToUser());
     }
 
+    public boolean userIsExist(long userId) {
+        String sql = """
+                select count(*) from users where id = ?
+                """;
+        return jdbcTemplate.queryForObject(sql, Integer.class, userId) == 1;
+    }
+
     public Users getUserById(long id) {
         String sql = "SELECT * from users where id = ?";
         return jdbcTemplate.query(sql, mapToRowToUser(), id)
+                .stream()
+                .findFirst()
+                .orElse(null);
+    }
+
+    public Users getUserByUserName(String userName) {
+        String sql = "SELECT * from users where user_name = ?";
+        return jdbcTemplate.query(sql, mapToRowToUser(), userName)
                 .stream()
                 .findFirst()
                 .orElse(null);

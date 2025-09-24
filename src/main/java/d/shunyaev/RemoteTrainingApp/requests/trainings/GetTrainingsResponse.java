@@ -20,6 +20,8 @@ public class GetTrainingsResponse {
         private LocalDate date;
         @JsonProperty("is_done")
         private Boolean isDone;
+        @JsonProperty("muscle_group")
+        private String muscleGroup;
         List<Exercises> exercises;
     }
 

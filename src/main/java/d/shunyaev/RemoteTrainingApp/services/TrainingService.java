@@ -85,6 +85,7 @@ public class TrainingService {
                             .setDate(training.getDate())
                             .setDayOfWeek(SupportComponent.dayOfWeekToRus(training.getDayOfWeek()))
                             .setIsDone(training.getIsDone())
+                            .setMuscleGroup(training.getMuscleGroup())
                             .setExercises(exercisesList);
                 })
                 .sorted(Comparator.comparing(GetTrainingsResponse.Trainings::getDate))
@@ -121,6 +122,30 @@ public class TrainingService {
                 .setApproach(request.getApproach());
 
         exerciseRepository.setExercise(exercise);
+        return new Result(Result.Message.SUCCESS);
+    }
+
+    @Transactional
+    public Result trainingIsDone(TrainingIsDoneRequest request) {
+        ValidateComponent.notNull(
+                request.getTrainingDate(),
+                request.getUserId()
+        );
+        if (!userRepository.userIsExist(request.getUserId())) {
+            throw LogicException.of(ResponseCode.NOT_FOUND_USER, request.getUserId());
+        }
+        Training training = trainingRepository.getTrainingsByUserId(request.getUserId())
+                .stream()
+                .filter(t -> t.getDate().equals(request.getTrainingDate()))
+                .findFirst()
+                .orElseThrow(() -> LogicException.of(ResponseCode.TRAINING_IS_NOT_FOUND,
+                        request.getTrainingDate()));
+
+        trainingRepository.updateTraining(
+                new Training()
+                        .setId(training.getId())
+                        .setIsDone(true)
+        );
         return new Result(Result.Message.SUCCESS);
     }
 
