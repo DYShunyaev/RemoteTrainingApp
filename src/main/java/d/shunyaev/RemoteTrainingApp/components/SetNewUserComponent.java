@@ -31,6 +31,6 @@ public class SetNewUserComponent {
                 .setLastName(request.getLastName())
                 .setRole(request.getIsTrainer() == 1 ? Role.TRAINER : Role.USER)
                 .setEmail(request.getEmail())
-                .setGender(request.getGender());
+                .setGender((Gender) SupportComponent.getEnumValue(Gender.values(), request.getGender()));
     }
 }
