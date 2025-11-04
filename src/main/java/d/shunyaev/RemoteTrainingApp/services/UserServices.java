@@ -13,16 +13,14 @@ import d.shunyaev.RemoteTrainingApp.model.UserInfo;
 import d.shunyaev.RemoteTrainingApp.model.Users;
 import d.shunyaev.RemoteTrainingApp.repositories.UserInfoRepository;
 import d.shunyaev.RemoteTrainingApp.repositories.UserRepository;
-import d.shunyaev.RemoteTrainingApp.requests.users.CreateUserRequest;
-import d.shunyaev.RemoteTrainingApp.requests.users.GetUsersRequest;
-import d.shunyaev.RemoteTrainingApp.requests.users.SetTrainerRequest;
-import d.shunyaev.RemoteTrainingApp.requests.users.UpdateUserRequest;
+import d.shunyaev.RemoteTrainingApp.requests.users.*;
 import d.shunyaev.RemoteTrainingApp.responses.GetUsersResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 public class UserServices extends AbstractService {
@@ -145,6 +143,35 @@ public class UserServices extends AbstractService {
 
         return new GetUsersResponse()
                 .setUsers(usersList.stream()
+                        .map(user -> {
+                            UserInfo userInfo = userInfoRepository.getUserInfoByUserName(user.getUserName());
+                            return new GetUsersResponse.UserData()
+                                    .setUserId(user.getId())
+                                    .setUserName(user.getUserName())
+                                    .setFirstName(user.getFirstName())
+                                    .setLastName(user.getLastName())
+                                    .setGender(user.getGender().getDescription())
+                                    .setEmail(user.getEmail())
+                                    .setDateOfBirth(userInfo.getDateOfBirth())
+                                    .setAge(userInfo.getAge())
+                                    .setRole(user.getRole().getDescription())
+                                    .setTrainingLevel(userInfo.getTrainingLevel().getDescription())
+                                    .setGoals(userInfo.getGoals().getDescription())
+                                    .setWeight(userInfo.getWeight())
+                                    .setHeight(userInfo.getHeight());
+                        })
+                        .toList());
+    }
+
+    public GetUsersResponse getUsers(GetUserByUserNameRequest request) {
+        Users users = userRepository.getUserByUserName(request.getUserName());
+
+        if (Objects.isNull(users)) {
+            throw LogicException.of(ResponseCode.NOT_FOUND_USER_USERNAME, request.getUserName());
+        }
+
+        return new GetUsersResponse()
+                .setUsers(Stream.of(users)
                         .map(user -> {
                             UserInfo userInfo = userInfoRepository.getUserInfoByUserName(user.getUserName());
                             return new GetUsersResponse.UserData()

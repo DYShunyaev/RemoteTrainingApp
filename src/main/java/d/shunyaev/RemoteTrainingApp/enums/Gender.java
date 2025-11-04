@@ -6,8 +6,8 @@ import lombok.Getter;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum Gender implements EnumInterface {
-    MAN("MAN"),
-    WOMAN("WOMAN"),
+    MAN("МУЖЧИНА"),
+    WOMAN("ЖЕНЩИНА"),
     NON("NON");
     private final String description;
 

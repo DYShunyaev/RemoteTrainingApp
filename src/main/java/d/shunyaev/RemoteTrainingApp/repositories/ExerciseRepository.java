@@ -18,14 +18,15 @@ public class ExerciseRepository extends BaseRepository {
 
     public void setExercise(Exercise exercise) {
         String sql = """
-                insert into exercise (training_id, exercise, quantity, approach)
-                values (?, ?, ?, ?)
+                insert into exercise (training_id, exercise, quantity, approach, weight)
+                values (?, ?, ?, ?, ?)
                 """;
         jdbcTemplate.update(sql,
                 exercise.getTrainingId(),
                 exercise.getExerciseName(),
                 exercise.getQuantity(),
-                exercise.getApproach());
+                exercise.getApproach(),
+                exercise.getWeight());
     }
 
     public List<Exercise> getExercisesByTrainingId(long trainingId) {
@@ -39,6 +40,7 @@ public class ExerciseRepository extends BaseRepository {
     private RowMapper<Exercise> mapToRowToTraining() {
         return ((rs, rowNum) -> new Exercise()
                 .setId(rs.getLong("id"))
+                .setWeight(rs.getInt("weight"))
                 .setTrainingId(rs.getLong("training_id"))
                 .setExerciseName(rs.getString("exercise"))
                 .setQuantity(rs.getInt("quantity"))

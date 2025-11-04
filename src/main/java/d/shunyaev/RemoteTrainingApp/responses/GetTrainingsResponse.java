@@ -36,5 +36,6 @@ public class GetTrainingsResponse {
         private String exerciseName;
         private int quantity;
         private int approach;
+        private int weight;
     }
 }

@@ -11,18 +11,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
 
-    //    @Bean
-//    public OpenAPI customOpenAPI() {
-//        return new OpenAPI()
-//                .info(new Info().title("Remote Training API").version("1.0"))
-//                .components(new Components()
-//                        .addSecuritySchemes("basicAuth",
-//                                new SecurityScheme()
-//                                        .type(SecurityScheme.Type.HTTP)
-//                                        .scheme("basic")
-//                                        .in(SecurityScheme.In.HEADER)
-//                                        .name("Authorization")));
-//    }
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()

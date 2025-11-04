@@ -18,5 +18,6 @@ public class Exercise {
     private String exerciseName;
     private int quantity; //количество
     private int approach; //подходы
+    private int weight = 0;
 
 }

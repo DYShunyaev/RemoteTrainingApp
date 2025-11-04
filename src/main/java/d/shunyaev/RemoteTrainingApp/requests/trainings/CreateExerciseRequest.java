@@ -24,4 +24,8 @@ public class CreateExerciseRequest {
             description = "Количество подходов"
     )
     private int approach;
+    @Schema(
+            description = "Вес"
+    )
+    private int weight;
 }

@@ -35,11 +35,11 @@ public class CreateUserRequest {
             defaultValue = "NON",
             example = "NON",
             allowableValues = {
-                    "MAN",
-                    "WOMAN",
+                    "МУЖЧИНА",
+                    "ЖЕНЩИНА",
                     "NON"
             },
-            description = "Допустимые значения: MAN, WOMAN, WOMAN"
+            description = "Допустимые значения: МУЖЧИНА, ЖЕНЩИНА, WOMAN"
     )
     @NonNull
     private String gender;

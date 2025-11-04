@@ -12,6 +12,7 @@ public enum ResponseCode {
     NPE(-2, "Объект %s содержит пустое значение"),
     DEFAULT_VALUE(-3, "Передано дефолтное значение - %s"),
     NOT_FOUND_USER(-4, "Пользователь с id %s не найден"),
+    NOT_FOUND_USER_USERNAME(-4, "Пользователь с user_name \"%s\" не найден"),
     BIRTH_DATE(-5, "Дата рождения не может быть позднее текущей даты"),
     INVALID_VALUE(-6, "Недопустимое значение"),
     USER_NOT_FOUND(-7, "Пользователь не найден"),

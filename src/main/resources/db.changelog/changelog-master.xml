@@ -133,6 +133,9 @@
             <column name="approach" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
+            <column name="weight" type="INTEGER">
+                <constraints nullable="true"/>
+            </column>
         </createTable>
     </changeSet>
 

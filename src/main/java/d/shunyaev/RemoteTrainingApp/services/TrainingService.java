@@ -75,6 +75,7 @@ public class TrainingService {
                             exerciseRepository.getExercisesByTrainingId(training.getId())
                                     .stream()
                                     .map(exercise -> new GetTrainingsResponse.Exercises()
+                                            .setWeight(exercise.getWeight())
                                             .setExerciseId(exercise.getId())
                                             .setApproach(exercise.getApproach())
                                             .setQuantity(exercise.getQuantity())
@@ -118,6 +119,7 @@ public class TrainingService {
         Training training = trainingRepository.getTrainingById(request.getTrainingId());
 
         Exercise exercise = new Exercise()
+                .setWeight(request.getWeight())
                 .setTrainingId(training.getId())
                 .setExerciseName(request.getExerciseName())
                 .setQuantity(request.getQuantity())
